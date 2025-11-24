@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pacman Java Game</title>
+    <style>
+      body {
+        margin: 0;
+        background-color: #222;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        color: white;
+        font-family: sans-serif;
+      }
+      #loading {
+        position: absolute;
+        font-size: 24px;
+      }
+    </style>
+    <!-- CheerpJ Loader -->
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Pacman Java Game</title>
+        <style>
+          body {
+            margin: 0;
+            background-color: #222;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+            font-family: sans-serif;
+          }
+          #loading {
+            position: absolute;
+            font-size: 24px;
+          }
+        </style>
+        <!-- CheerpJ Loader -->
+        <script src="https://cjrtnc.leaningtech.com/3.0/cj3loader.js"></script>
+      </head>
+      <body>
+        <div id="loading">Loading Pacman...</div>
+
+        <script>
+          // Initialize CheerpJ
+          cheerpjInit().then(() => {
+            document.getElementById("loading").style.display = "none";
+
+            // Dynamically determine the path to the JAR file
+            // This handles both root deployments and subdirectory deployments (like GitHub Pages)
+            let path = window.location.pathname;
+            // If the path points to a file (e.g. index.html), strip the filename
+            if (!path.endsWith("/")) {
+              path = path.substring(0, path.lastIndexOf("/") + 1);
+            }
+
+            // Run the JAR file
+            // The path "/app/" refers to the virtual file system root which maps to the domain root
+            // So we append the current path (e.g., /pacman-game/) to find the jar
+            cheerpjRunJar("/app" + path + "pacman.jar");
+          });
+        </script>
+      </body>
+    </html>
+  </head>
+</html>
