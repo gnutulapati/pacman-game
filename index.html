@@ -19,60 +19,44 @@
         position: absolute;
         font-size: 24px;
       }
+      #game-container {
+        position: relative;
+        width: 608px;
+        height: 672px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
     </style>
     <!-- CheerpJ Loader -->
     <script src="https://cjrtnc.leaningtech.com/3.0/cj3loader.js"></script>
   </head>
   <body>
-    <div id="loading">Loading Pacman...</div>
+    <div id="game-container">
+      <div id="loading">Loading Pacman...</div>
+    </div>
 
     <script>
-      // Initialize CheerpJ and run the game
-      (async function () {
-        try {
-          console.log("Initializing CheerpJ...");
+      // Initialize CheerpJ
+      cheerpjInit().then(async () => {
+        // Create the display element (canvas) explicitly
+        // This is required to ensure the AWT Toolkit can initialize properly
+        // Dimensions match the game board (19*32=608, 21*32=672)
+        const display = cheerpjCreateDisplay(608, 672);
+        document.getElementById("game-container").appendChild(display);
 
-          // Dynamically determine the base path
-          let basePath = window.location.pathname;
-          if (!basePath.endsWith("/")) {
-            basePath = basePath.substring(0, basePath.lastIndexOf("/") + 1);
-          }
+        document.getElementById("loading").style.display = "none";
 
-          console.log("Base path:", basePath);
-
-          // Initialize CheerpJ with proper configuration
-          await cheerpjInit({
-            enableInputMethods: true,
-            clipboardMode: "permission",
-            javaProperties: [
-              // Set the working directory to where the images are
-              "-Duser.dir=/app" + basePath,
-            ],
-          });
-
-          console.log("CheerpJ initialized successfully");
-          document.getElementById("loading").textContent = "Starting game...";
-
-          // Small delay to ensure everything is ready
-          await new Promise((resolve) => setTimeout(resolve, 300));
-
-          // Hide loading message
-          document.getElementById("loading").style.display = "none";
-
-          // Run the JAR file
-          const jarPath = "/app" + basePath + "pacman_v3.jar";
-          console.log("Running JAR from:", jarPath);
-          await cheerpjRunJar(jarPath);
-
-          console.log("Game started successfully");
-        } catch (error) {
-          console.error("Error initializing game:", error);
-          document.getElementById("loading").textContent =
-            "Error loading game. Check console for details. Error: " +
-            error.message;
-          document.getElementById("loading").style.color = "red";
+        // Dynamically determine the path to the JAR file
+        let path = window.location.pathname;
+        if (!path.endsWith("/")) {
+          path = path.substring(0, path.lastIndexOf("/") + 1);
         }
-      })();
+
+        // Run the JAR file
+        // The path "/app/" refers to the virtual file system root which maps to the domain root
+        await cheerpjRunJar("/app" + path + "pacman_v3.jar");
+      });
     </script>
   </body>
 </html>
